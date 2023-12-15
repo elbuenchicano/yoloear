@@ -1,0 +1,5 @@
+names:
+  0: head
+path: I:/research/head/data2
+train: images/train
+val: images/val
