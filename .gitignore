@@ -33,3 +33,9 @@ packages/
 /yoloear.pyproj
 /yoloear.sln
 /__pycache__/utils.cpython-39.pyc
+data/
+*.dll
+runs/
+*.dll
+/data.yaml
+/data.yaml

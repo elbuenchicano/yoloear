@@ -1,5 +1,5 @@
 names:
-  0: head
-path: I:/research/head/data2
+  0: ear
+path: I:/research/yoloear/data
 train: images/train
 val: images/val
