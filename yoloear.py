@@ -10,7 +10,25 @@ from    ultralytics     import YOLO
 
 import matplotlib.pyplot as plt
 import cv2
+import numpy             as np
 
+def pad32(im):
+    w, h, c = im.shape
+    
+    rw  = w%32
+    rh  = h%32
+
+    nw  = w + (32 - rw) 
+    nh  = h + (32 - rh) 
+
+    newim   = np.zeros((nw, nh, 3))
+
+    newim[:w, :h] += im
+
+    #plt.imshow(newim)
+    #plt.show()
+
+    return newim.astype(int)
 
 ####
 def organizeEar():
@@ -19,7 +37,7 @@ def organizeEar():
     '''
     
     tsize   = 0.8 
-    im_size = 640
+    im_size = 320
     
     
     im_pts  = {
@@ -71,24 +89,38 @@ def organizeEar():
 
     for im in tqdm(train, 'train'):
                
-        name = os.path.basename(im[:-4])
+        name    = os.path.basename(im[:-4])
 
-        im   = cv2.imread(im)
+        im      = cv2.imread(im)
+        #im      = cv2.cvtColor(im, cv2.COLOR_RGB2BGR)
 
-        imr  = cv2.resize(im, (160, 320), interpolation = cv2.INTER_AREA)
-                        
+        w, h, c = im.shape 
+
+        if w > im_size or h > im_size:
+            nim  = cv2.resize(im, (im_size, im_size), interpolation = cv2.INTER_AREA)
+            w, h = im_size, im_size
+
+
+        else:
+            nim     = np.zeros((im_size, im_size, 3), dtype= 'int')
+            nim[:w, :h] = im 
+
+
+
+        dims = np.array([w/2, h/2, w, h])
+
+        dims = dims/im_size
         
-
         im_ = i_train + '/' + name + '.jpg' 
         lb_ = l_train + '/' + name + '.txt'  
 
-        row = '0 0.5 0.5 0.95 0.95' 
+        row = f'0 {dims[0]} {dims[1]} {dims[2]} {dims[3]}' 
                 
         f = open(lb_, "w")
         f.write(row)
         f.close()
             
-        cv2.imwrite(im_, imr)
+        cv2.imwrite(im_, nim)
 
         
     for im in tqdm(val, 'val'):
@@ -97,22 +129,33 @@ def organizeEar():
 
         im   = cv2.imread(im)
 
-        imr  = cv2.resize(im, (160, 320), interpolation = cv2.INTER_AREA)
-                        
-        
+        nim  = np.zeros((im_size, im_size, 3), dtype= 'int')
+
+        w, h, c = im.shape 
+
+        if w > im_size or h > im_size:
+            nim  = cv2.resize(im, (im_size, im_size), interpolation = cv2.INTER_AREA)
+            w, h = im_size, im_size
+
+
+        else:
+            nim     = np.zeros((im_size, im_size, 3), dtype= 'int')
+            nim[:w, :h] = im 
+
+        dims = np.array([w/2, h/2, w, h])
+
+        dims = dims/im_size
 
         im_ = i_val + '/' + name + '.jpg' 
         lb_ = l_val + '/' + name + '.txt'  
 
-        row = '0 0.5 0.5 0.95 0.95' 
+        row = f'0 {dims[0]} {dims[1]} {dims[2]} {dims[3]}' 
                 
         f = open(lb_, "w")
         f.write(row)
         f.close()
             
-        cv2.imwrite(im_, imr)
-
-                       
+        cv2.imwrite(im_, nim)
     
     ######## yaml file dump ...................................................
 
@@ -186,6 +229,6 @@ def show():
 ##############################################################
 if __name__ == '__main__':
     #show()
-    #organizeEar()
-    yolotrain()
+    organizeEar()
+    #yolotrain()
     ...
