@@ -107,7 +107,7 @@ def organizeEar():
 
 
 
-        dims = np.array([w/2, h/2, w, h])
+        dims = np.array([h/2, w/2, h, w])
 
         dims = dims/im_size
         
@@ -142,7 +142,7 @@ def organizeEar():
             nim     = np.zeros((im_size, im_size, 3), dtype= 'int')
             nim[:w, :h] = im 
 
-        dims = np.array([w/2, h/2, w, h])
+        dims = np.array([h/2, w/2, h, w])
 
         dims = dims/im_size
 
