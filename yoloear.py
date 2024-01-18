@@ -229,6 +229,6 @@ def show():
 ##############################################################
 if __name__ == '__main__':
     #show()
-    organizeEar()
-    #yolotrain()
+    #organizeEar()
+    yolotrain()
     ...

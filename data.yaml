@@ -1,5 +1,5 @@
 names:
   0: ear
-path: I:/research/yoloear/data
+path: /home/rensso/research/yoloear/data
 train: images/train
 val: images/val
